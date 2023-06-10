@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 // Member Init List
 // Copy, Move Constructor
+// Quote Microsoft Document
 class Object
 {
 public:
@@ -24,6 +25,16 @@ public:
 	Object& operator=(const Object& _Other)
 	{
 		std::cout << "Copy Assignment, Size : " << _Other.m_Size << std::endl;
+
+		if (this != &_Other)
+		{
+			delete[] m_Data;
+
+			m_Size = _Other.m_Size;
+			m_Data = new int[m_Size];
+			std::copy(_Other.m_Data, _Other.m_Data + m_Size, m_Data);
+		}
+		return *this;
 	}
 
 	//Move Constructor
@@ -63,6 +74,11 @@ public:
 	{
 		std::cout << "Destructor" << std::endl;
 	}
+
+	size_t GetSize()
+	{
+		return this->m_Size;
+	}
 private:
 	size_t m_Size;
 	int* m_Data;
@@ -70,6 +86,20 @@ private:
 
 int main(void)
 {
+	std::vector<Object> objs;
+	objs.reserve(4);
+
+	Object Simple(5);
+	Object Copy(9);
+
+	Simple = Copy;
+
+	objs.emplace_back(Simple);
+	objs.emplace_back(Object(7));
+
+
 	
+	
+
 	return 0;
 }
